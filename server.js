@@ -103,7 +103,7 @@ app.get('/api/table', (req, res) => {
 
     let userRequestObj = {
         cookie: token
-    };
+    }; //
 
     fetch('http://localhost:3000/table', {
         method: 'POST',
