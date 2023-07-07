@@ -15,7 +15,11 @@ app.use(express.json());
 
 
 app.get('/api/register', (req, res) => {
-    res.render('register-en');
+    if (req.query.msg) { //If the user just logged out
+        res.render('register-en.ejs', { msg: `<section class="alert alert-danger"><p>${req.query.msg}</p></section>` });
+    } else {
+        res.render('register-en.ejs');
+    }
 });
 
 app.post('/api/register', (req, res) => {
@@ -25,6 +29,8 @@ app.post('/api/register', (req, res) => {
         password: req.body.password
     };
 
+    let reload = false;
+
     fetch('http://localhost:3000/register', {
         method: 'POST',
         headers: {
@@ -33,18 +39,21 @@ app.post('/api/register', (req, res) => {
         body: JSON.stringify(userRequestObj),
     })
         .then((res) => {
-            console.log("\nstatus: " + res.status);
-            return res.json();
-            // if (res.ok) {
-            //     // Status 200 OK
-            // } else {
-            //     // Handle non-200 status
-            // }
+            if (res.ok) {
+                return res.json();
+            } else if (res.status == 400 || res.status == 409) {
+                reload = true;
+                return res.json();
+            }
         })
         .then((data) => {
-            console.log("data (w/ cookie): " + JSON.stringify(data.cookie)); // Access the cookie value
-            //res.cookie("token", token);
-            res.send('check terminal (register)');
+            if (reload) {
+                res.redirect(`/api/register?msg=${data.error}`);
+            } else {
+                console.log("data (w/ cookie): " + JSON.stringify(data.cookie)); // Access the cookie value
+                res.cookie("token", data.cookie);
+                res.redirect("/api/table");
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -53,11 +62,19 @@ app.post('/api/register', (req, res) => {
 
 //need auth check
 app.get('/api/login', (req, res) => {
-    if (Boolean(req.query.logout) == true) { //If the user just logged out
-        res.render('login-en.ejs', { msg: '<section class="alert alert-success"><p>Logged out successfully</p></section>' });
+    // //logged-out -> { msg: '<section class="alert alert-success"><p>Logged out successfully</p></section>' }
+
+    // //any else -> 
+    if (req.query.msg) { //If the user just logged out
+        if (req.query.msg == 'logged-out'){
+            res.render('login-en.ejs', { msg: '<section class="alert alert-success"><p>Logged out successfully</p></section>' });
+        } else {
+            res.render('login-en.ejs', { msg: `<section class="alert alert-danger"><p>${req.query.msg}</p></section>` });
+        }
     } else {
         res.render('login-en.ejs');
     }
+
 });
 
 app.post('/api/login', (req, res) => {
@@ -67,6 +84,8 @@ app.post('/api/login', (req, res) => {
         password: req.body.password
     };
 
+    let reload = false;
+
     fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
@@ -75,17 +94,20 @@ app.post('/api/login', (req, res) => {
         body: JSON.stringify(userRequestObj),
     })
         .then((res) => {
-            console.log("\nstatus: " + res.status);
             if (res.ok) {
                 return res.json();
-            } else {
-                return res.send('Error logging in!');
+            } else if (res.status == 401) {
+                reload = true;
+                return res.json();
             }
         })
         .then((data) => {
-            console.log("data (w/ cookie): " + JSON.stringify(data.cookie)); // Access the cookie value
-            res.cookie("token", data.cookie);
-            res.redirect("/api/table");
+            if (reload) {
+                res.redirect(`/api/login?msg=${data.error}`);
+            } else {
+                res.cookie("token", data.cookie);
+                res.redirect("/api/table");
+            }
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -96,14 +118,14 @@ app.post('/api/login', (req, res) => {
 app.get('/api/table', (req, res) => {
 
     const token = req.cookies.token;
-    if (!(token)){
+    if (!(token)) {
         res.redirect('/api/login');
     }
 
 
     let userRequestObj = {
         cookie: token
-    }; //
+    };
 
     fetch('http://localhost:3000/table', {
         method: 'POST',
@@ -124,7 +146,7 @@ app.get('/api/table', (req, res) => {
         .then((data) => {
             //write data into views
             console.log('data: ' + data);
-            res.render('table-json.ejs', {tableData: JSON.stringify(data)});
+            res.render('table-json.ejs', { tableData: JSON.stringify(data) });
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -134,7 +156,7 @@ app.get('/api/table', (req, res) => {
 app.post('/api/logout', (req, res) => {
     if (req.cookies.token) {
         res.clearCookie("token");
-        res.status(302).redirect("/api/login?logout=true");
+        res.status(302).redirect("/api/login?msg=logged-out");
     } else {
         res.status(405).send("Invalid JWT");
     }
