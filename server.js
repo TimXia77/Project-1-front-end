@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 
 var cookieParser = require("cookie-parser");
-const bodyParser = require('body-parser'); //parse body of post req
-const PORT = 4000 //allow environment variable to possible set PORT
+const bodyParser = require('body-parser'); 
+const PORT = 4000 
 
 app.set("view engine", "ejs");
 
@@ -50,7 +50,6 @@ app.post('/api/register', (req, res) => {
             if (reload) {
                 res.redirect(`/api/register?msg=${data.error}`);
             } else {
-                console.log("data (w/ cookie): " + JSON.stringify(data.cookie)); // Access the cookie value
                 res.cookie("token", data.cookie);
                 res.redirect("/api/table");
             }
@@ -135,17 +134,10 @@ app.get('/api/table', (req, res) => {
         body: JSON.stringify(userRequestObj),
     })
         .then((res) => {
-            console.log("\nstatus: " + res.status);
             return res.json();
-            // if (res.ok) {
-            //     // Status 200 OK
-            // } else {
-            //     // Handle non-200 status
-            // }
         })
         .then((data) => {
             //write data into views
-            console.log('data: ' + data);
             res.render('table-json.ejs', { tableData: JSON.stringify(data) });
         })
         .catch((error) => {
@@ -172,3 +164,5 @@ app.listen(PORT, err => {
         console.log(`http://localhost:${PORT}/api/login`)
     }
 })
+
+module.exports = app; //For automated testing

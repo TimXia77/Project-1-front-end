@@ -13,28 +13,25 @@ chai.use(chaiHttp);
 // app.use(cookieParser());
 
 //constants
-// const existUserTest = 'existUserTest';  //should always exist
+const existUserTest = 'existUserTest';  //should always exist
 // const newUserTest = 'newUserTest';      //should never exist
 
-// var loginCookie; //transports cookie string between tests
-// var redirectUrl; //transports redirected urls between tests
+var loginCookie; //transports cookie string between tests
+var redirectUrl; //transports redirected urls between tests
 
 
 describe('Login and Register:\n', () => {
-    it('Successfully registered account (should return 200)', (done) => {
+    it('Successfully log in to account (should return 200)', (done) => {
         supertest(app)
-            .post('/register')
-            .send({ email: 'TestTest@test.test', username: existUserTest, password: 'existUser123' })
-            .expect(200)
-            .expect((res) => {
-                if (!(res.body.cookie)) {
-                  throw new Error('Cookie not found in response body');
-                }})
+            .post('/api/login')
+            .send({ email: 'timxia6208@gmail.com', username: 'TimXia77', password: '1a2b3c4D' })
+            .expect(302)
+            .expect('set-cookie', /token=/)
             .end((err, res) => {
                 if (err) throw err;
-                loginCookie = res.body.cookie;
+                redirectUrl = res.headers.location; // for the next test
+                loginCookie = res.headers['set-cookie'];
                 done();
             });
-
     });
 });
