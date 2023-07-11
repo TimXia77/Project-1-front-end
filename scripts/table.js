@@ -1,4 +1,4 @@
-console.log("HERE");
+
 //Load data into table
 $(document).ready(function () {
     $('#dataTable').DataTable({
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 function logout(){ 
-    fetch(`/api/logout`, { 
+    fetch(`/logout`, { 
         method: 'POST',
     })
     .then(response => {

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <!-- Web Experience Toolkit (WET) / Boîte à outils de l'expérience Web (BOEW)
 		wet-boew.github.io/wet-boew/License-en.html / wet-boew.github.io/wet-boew/Licence-fr.html -->
-    <title>WET-Register-EN</title>
+    <title>Table Test</title>
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta name="description" content=" " />
     <link href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/favicon.ico" rel="icon" type="image/x-icon" />
@@ -84,6 +84,7 @@
                 <div class="col-md-12">
                     <nav class="gcweb-menu" typeof="SiteNavigationElement">
                         <h2 class="wb-inv">Menu</h2>
+
                         <button type="button" aria-haspopup="true" aria-expanded="false"><span class="wb-inv">Main
                             </span>Menu <span class="expicon glyphicon glyphicon-chevron-down"></span></button>
                         <ul role="menu" aria-orientation="vertical"
@@ -128,11 +129,19 @@
                                     href="https://www.canada.ca/en/services/science.html">Science and innovation</a>
                             </li>
                         </ul>
-                    </nav>
+                        <div class="pull-right text-right">
+                            <h2 class="wb-inv">Logout</h2>
+                            <button type="button" class="btn btn-default" id="logoutButton">LOGOUT</button>
+                            <!-- <button type="button" aria-haspopup="true" id="logoutButton"><span class="wb-inv">Logout
+                                </span>Logout</button> -->
+                        </div>
+                        </nav>
 
                 </div>
             </div>
         </div>
+
+        
         <nav id="wb-bc" property="breadcrumb">
             <h2>You are here:</h2>
             <div class="container">
@@ -153,36 +162,12 @@
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
 
+
+
         <!-- content -->
+        
+        <!-- <%- locals.tableData %> -->
 
-        <h1 class="mrgn-bttm-lg">Register</h1> <%- locals.msg %>
-
-        <div class="wb-frmvld">
-            <form action="/api/register" method="post" id="form-validation">
-
-                <div class="form-group">
-
-                    <div class="form-group">
-                        <label for="email" class="required"><span class="field-name">Email address</span> (yourname@domain.com)</label>
-                        <input class="form-control" id="email" name="email" type="email" autocomplete="email" required="required"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username" class="required"><span class="field-name">Username</span></label>
-                        <input class="form-control" id="username" name="username" type="text"
-                            autocomplete="given-name" required="required" data-rule-minlength="2" maxlength="16" data-rule-alphanumeric="true"/>
-                    </div>
-
-                    <div class="form-group mrgn-bttm-lg">
-                        <label for="password" class="required"><span class="field-name">Password</span> (Must contain at least one number, one uppercase letter, one lowercase letter, and at least 8 or more characters)</label> 
-                        <input class="form-control" id="password" name="password" type="password"
-                            autocomplete="family-name" required="required" data-rule-minlength="2" maxlength="16" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-msg="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
-                    </div>
-
-                    <button type="submit" class="btn btn-default mrgn-rght-md" id="registerButton">Register</button>
-                    <a href="/api/login">Log in</a>
-            </form>
-        </div>
 
         <!-- Main content footer starts -->
         <footer class="pagedetails">
@@ -203,7 +188,7 @@
                 <div class="col-xs-12">
                     <dl id="wb-dtmd">
                         <dt>Date modified:</dt>
-                        <dd><time property="dateModified">2023-07-07</time></dd>
+                        <dd><time property="dateModified">2023-06-14</time></dd>
                     </dl>
                 </div>
             </div>
@@ -263,8 +248,12 @@
     <!-- Static footer ends -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/js/wet-boew.min.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/js/theme.min.js"></script>
+
+    <script src='/scripts/table.js'></script>
 </body>
 
 </html>

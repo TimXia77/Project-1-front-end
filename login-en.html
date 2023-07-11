@@ -155,10 +155,10 @@
 
         <!-- content -->
         
-        <h1 class="mrgn-bttm-lg">Login</h1> <%- locals.msg %>
+        <h1 class="mrgn-bttm-lg">Login</h1> <div id="msg"></div>
 
         <div class="wb-frmvld">
-            <form action="/api/login" method="post" id="form-validation">
+            <form action="/login" method="post" id="form-validation">
 
                 <div class="form-group">
                     <div class="form-group">
@@ -174,7 +174,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-default mrgn-rght-md">Log In</button>
-                    <a href="/api/register">Register now</a>
+                    <a href="/register">Register now</a>
             </form>
         </div>
 
@@ -259,6 +259,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/js/wet-boew.min.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/js/theme.min.js"></script>
+    <script src='/scripts/login-en.js'></script>
 </body>
 
 </html>
