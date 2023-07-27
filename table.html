@@ -130,11 +130,10 @@
                             </li>
                         </ul>
                         <div class="pull-right text-right">
-                            <!-- <%- locals.loggedInAs %> -->
                             <h2 class="wb-inv">Logout</h2>
-                            <button type="button" class="btn btn-default" id="logoutButton">LOGOUT</button>
-                            <!-- <button type="button" aria-haspopup="true" id="logoutButton"><span class="wb-inv">Logout
-                                </span>Logout</button> -->
+                            <form action="http://localhost:4000/logout" method="post" id="form-validation">
+                                <button type="submit" class="btn btn-default" id="logoutButton">LOGOUT</button>
+                            </form>
                         </div>
                         </nav>
 

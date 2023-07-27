@@ -1,31 +1,22 @@
 
-//Load data into table
-$(document).ready(function () {
-    $('#dataTable').DataTable({
-        ajax: 'data/arrays.txt',
-    });
-});
+const cookies = document.cookie.split(';');
+let authorized = false; 
 
-console.log("TEST");
-
-//Event Handlers
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('logoutButton').addEventListener('click', logout);
-})
-
-function logout() {
-    fetch('http://localhost:4000/logout', { //CHANGE to http://api:3000/logout later, when proxy is added to avoid cors 
-        method: 'POST',
-        credentials: 'include', // Include cookies in the cross-origin request?
-    })
-    .then(response => {
-        if (response.ok) { 
-            window.location.href = response.url;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-
+for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name == 'token') {  // The "token" cookie exists
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                ajax: 'data/arrays.txt',
+            });
+        });
+        authorized = true;
+        break;
+    } 
 }
+
+if (!(authorized)){         // The "token" cookie does not exist
+    window.location.href = "http://localhost/login-en.html";
+}
+
 
