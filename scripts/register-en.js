@@ -1,25 +1,53 @@
 
-const urlParams = new URLSearchParams(window.location.search);
-const myParam = urlParams.get('error');
-let errorText = document.getElementById("msg");
+// Since authentication is not the focus of the project, this is a band-aid solution:
+const cookies = document.cookie.split(';');
+let authorized = false; 
 
-switch (myParam) {
-    case "taken-user-email":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Username and email taken by another user</p></div>';
+for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name == 'token') {  // The "token" cookie exists
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                ajax: 'data/arrays.txt',
+            });
+        });
+        authorized = true;
         break;
-    case "taken-email":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Email is already taken by another user</p></div>';
-        break;
-    case "taken-user":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Username is already taken by another user</p></div>';
-        break;
-    case "username":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Invalid format for username</p></div>';
-        break;
-    case "email":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Invalid format for email</p></div>';
-        break;
-    case "password":
-        errorText.innerHTML = '<div class="alert alert-danger"><p>Invalid format for password</p></div>';
-        break;
+    } 
 }
+
+if (authorized){         // The "token" cookie does not exist
+    window.location.href = "/table.html";
+}
+
+let msg = document.getElementById("msg");
+
+//Handles server responses:
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('form-validation');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: document.getElementById("email").value,
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            })
+        });
+
+        const responseData = await response.json();
+
+        if (response.ok) {
+            document.cookie = `token=${responseData.token}`;
+            window.location.href = "/table.html"
+
+        } else {
+            msg.innerHTML = `<div class="alert alert-danger"><p> ${responseData.error} </p></div>`;
+        }
+    });
+});
