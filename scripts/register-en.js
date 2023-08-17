@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault(); // Prevent default form submission
 
-        const response = await fetch(form.action, {
+        let error = false;
+        fetch(form.action, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,16 +39,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 username: document.getElementById("username").value,
                 password: document.getElementById("password").value
             })
-        });
-
-        const responseData = await response.json();
-
-        if (response.ok) {
-            document.cookie = `token=${responseData.token}`;
-            window.location.href = "/table.html"
-
-        } else {
-            msg.innerHTML = `<div class="alert alert-danger"><p> ${responseData.error} </p></div>`;
-        }
+        })
+        .then((response) => {
+            if (response.ok) {
+                error = false;
+            } else {
+                error = true;
+            }
+            return response.json();
+        })
+        .then((responseJSON) => {
+            if (error) {
+                msg.innerHTML = `<div class="alert alert-danger"><p> ${responseJSON.error} </p></div>`;
+            } else {
+                document.cookie = `token=${responseJSON.token}`;
+                window.location.href = "/table.html"
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error)
+        })
     });
 });
