@@ -17,7 +17,7 @@ for (const cookie of cookies) {
 }
 
 if (authorized){         // The "token" cookie does not exist
-    window.location.href = "/table.html";
+    window.location.href = "/table";
 }
 
 
@@ -50,18 +50,22 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then((response) => {
             if (response.ok) {
+                console.log("RESPONSE IS OK");
                 error = false;
             } else {
+                console.log("RESPONSE IS ERR");
                 error = true;
             }
             return response.json();
         })
         .then((responseJSON) => {
             if (error) {
+                console.log("RESPONSE IS ERR 2");
                 msg.innerHTML = `<div class="alert alert-danger"><p> ${responseJSON.error} </p></div>`;
             } else {
+                console.log("RESPONSE IS OK 2");
                 document.cookie = `token=${responseJSON.token}`;
-                window.location.href = "/table.html"
+                window.location.href = "/table"
             }
         })
         .catch((error) => {

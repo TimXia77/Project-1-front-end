@@ -17,7 +17,7 @@ for (const cookie of cookies) {
 }
 
 if (authorized){         // The "token" cookie does not exist
-    window.location.href = "/table.html";
+    window.location.href = "/table";
 }
 
 let msg = document.getElementById("msg");
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 msg.innerHTML = `<div class="alert alert-danger"><p> ${responseJSON.error} </p></div>`;
             } else {
                 document.cookie = `token=${responseJSON.token}`;
-                window.location.href = "/table.html"
+                window.location.href = "/table"
             }
         })
         .catch((error) => {

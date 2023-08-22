@@ -17,7 +17,7 @@ for (const cookie of cookies) {
 }
 
 if (!(authorized)){         // The "token" cookie does not exist
-    window.location.href = "/login-en.html";
+    window.location.href = "/login";
 }
 
 const logoutButton = document.getElementById("logoutButton");
@@ -25,7 +25,7 @@ const logoutButton = document.getElementById("logoutButton");
 // Add a click event listener to the button
 logoutButton.addEventListener("click", function() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    window.location.href = "/login-en.html"
+    window.location.href = "/login";
 });
 
 
